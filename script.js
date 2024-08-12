@@ -25,6 +25,9 @@ const humidityElement = document.getElementById("humidity");
 const windSpeedElement = document.getElementById("windSpeed");
 // Selects the wind speed element to display the weather data
 
+const timeElement = document.getElementById("time");
+// Selects the time element to display the local time
+
 searchButton.addEventListener("click", () => {
     const location = locationInput.value;
     if (location) {
@@ -48,6 +51,11 @@ function fetchWeatherLocation(location) {
             descriptionElement.textContent = data.weather[0].description;
             humidityElement.textContent = `Humidity: ${data.main.humidity}%`;
             windSpeedElement.textContent = `Wind Speed: ${data.wind.speed} m/s`;
+
+            // Calculate and display the local time
+            const timezoneOffset = data.timezone; // Timezone offset in seconds
+            const localTime = new Date(Date.now() + timezoneOffset * 100);
+            timeElement.textContent = `Local Time: ${localTime.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
         })
         .catch((error) => {
             console.error("Error fetching weather data:", error);
@@ -56,5 +64,6 @@ function fetchWeatherLocation(location) {
             descriptionElement.textContent = "Error fetching data";
             humidityElement.textContent = "Error fetching data";
             windSpeedElement.textContent = "Error fetching data";
+            timeElement.textContent = "Error fetching data";
         });
 }
